@@ -1,19 +1,17 @@
 var m = require("mithril");
 var WebsiteVisitor = require("../models/WebsiteVisitor.js");
 
+WebsiteVisitor.initializeState();
+
 var Showing = {
     state: {
-        value: 10,
+        value: WebsiteVisitor.tableState['rows_per_page'],
         setValue: function(v) {
             Showing.state.value = v;
+            WebsiteVisitor.updateRowsPerPage(v);
         }
     },
-
-    oninit: function(vnode){
-            Showing.state.value = vnode.attrs.value;
-    },
-
-    view: function() {
+    view: function(vnode) {
         return m("input", {
             oninput: m.withAttr("value", Showing.state.setValue),
             value: Showing.state.value,
@@ -25,7 +23,7 @@ var Showing = {
 
 var RowsOutOf = {
     state: {
-        value: 10,
+        value: WebsiteVisitor.tableState['total_rows'],
         setValue: function(v) {
             RowsOutOf.state.value = v;
             WebsiteVisitor.generateList(RowsOutOf.state.value);
@@ -33,8 +31,7 @@ var RowsOutOf = {
     },
 
     oninit: function(vnode){
-            RowsOutOf.state.value = vnode.attrs.value;
-            WebsiteVisitor.generateList(vnode.attrs.value);
+            WebsiteVisitor.generateList(RowsOutOf.state.value);
     },
 
     view: function(vnode) {
@@ -47,18 +44,14 @@ var RowsOutOf = {
 
 var StartingAt = {
     state: {
-        value: 10,
+        value: WebsiteVisitor.tableState['row_offset'],
         setValue: function(v) {
             StartingAt.state.value = v;
+            WebsiteVisitor.updateOffset(v);
         }
     },
 
-    oninit: function(vnode){
-            StartingAt.state.value = vnode.attrs.value;
-    },
-
-
-    view: function() {
+    view: function(vnode) {
         return m("input", {
             oninput: m.withAttr("value", StartingAt.state.setValue),
             value: StartingAt.state.value,

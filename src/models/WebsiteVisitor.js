@@ -1,8 +1,7 @@
 'use strict';
 var m = require("mithril");
 var ShowingRowsOf = require("../views/ShowingRowsOf");
-
-var total_rows = 0;
+var TableState = require("../models/TableState.js");
 
 function random_ip_generator() {
     var listOfNumbers = [172, 198, 112, 224, 181];
@@ -26,13 +25,20 @@ function random_gender_generator() {
     return gender[Math.floor(Math.random() * gender.length)];
 }
 
+var data_rows;
+var tableState;
 
 var WebsiteVisitor = {
-    list: [],
-    generateList: function(total_rows) {
 
-        var data_rows = [];
-        for (var i = 0; i < total_rows; i++){
+    list: [],
+    tableState: {},
+    initializeState: function(){
+        WebsiteVisitor.tableState = new TableState(2, 6, 15);
+    },
+    generateList: function(value) {
+
+        data_rows = [];
+        for (var i = 0; i < value; i++){
             data_rows.push({
                 src_ip: random_ip_generator(),
                 timestamp: random_timestamp_generator(),
@@ -40,18 +46,20 @@ var WebsiteVisitor = {
                 gender: random_gender_generator()
             });
         }
-        console.log(data_rows);
-        WebsiteVisitor.list = data_rows;
-        return data_rows;
+        WebsiteVisitor.list = data_rows.slice(WebsiteVisitor.tableState['row_offset'],  (parseInt(WebsiteVisitor.tableState['row_offset'])+parseInt(WebsiteVisitor.tableState['rows_per_page'])));
     },
 
-    retrievePage: function(page_num, row_count){
+    updateOffset: function(offset){
 
+        WebsiteVisitor.tableState['row_offset'] = offset;
+        if(data_rows && data_rows.length>0){
+            WebsiteVisitor.list = data_rows.slice(WebsiteVisitor.tableState['row_offset'],  (parseInt(WebsiteVisitor.tableState['row_offset'])+parseInt(WebsiteVisitor.tableState['rows_per_page'])));
+        }
     },
 
-
-    retrievePageWithOffset: function(offset, row_count){
-
+    updateRowsPerPage: function(rows_per_page){
+        WebsiteVisitor.tableState['rows_per_page'] = rows_per_page;
+        WebsiteVisitor.list = data_rows.slice(WebsiteVisitor.tableState['row_offset'],  (parseInt(WebsiteVisitor.tableState['row_offset'])+parseInt(WebsiteVisitor.tableState['rows_per_page'])));
     }
 
 }
