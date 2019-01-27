@@ -2,14 +2,14 @@ var m = require("mithril");
 var ShowingRowsOf = require("./ShowingRowsOf.js");
 var Table = require("./Table.js");
 
-var offset;
-var rows_per_page;
-var total_rows;
-var current_offset;
-
 var Main = {
     view: function() {
-        return m("body", [m(ShowingRowsOf, "Hello"),
+        return m("body", [m("label", "Showing: "),
+                          m(ShowingRowsOf.Showing, {value: 3}),
+                          m("label", "rows out of: "),
+                          m(ShowingRowsOf.RowsOutOf, {value:7}),
+                         m("label", "Starting at: "),
+                          m(ShowingRowsOf.StartingAt, {value: 1}),
                           m(Table, "Test")
         ]);
     }
