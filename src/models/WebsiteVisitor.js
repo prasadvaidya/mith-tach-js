@@ -33,7 +33,7 @@ var WebsiteVisitor = {
     list: [],
     tableState: {},
     initializeState: function(){
-        WebsiteVisitor.tableState = new TableState(0, 15, 30);
+        WebsiteVisitor.tableState = new TableState(0, 1000, 1000000);
     },
     generateList: function(value) {
 
